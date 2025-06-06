@@ -1,0 +1,237 @@
+Міністерство освіти і науки України
+Харківський національний  університет радіоелектроніки
+
+Кафедра програмної інженерії
+
+
+ЗВІТ
+з лабораторної роботи №3
+з дисципліни «Архітектура програмного забезпечення»
+
+
+
+Виконав:
+ст. гр. ПЗПІ-22-6
+Макогон Б.О.
+
+Перевірив:
+ст. викл. каф. ПІ
+Сокорчук І.П.
+
+
+Харків 2025
+
+1 ІСТОРІЯ ЗМІН
+Зміни звіту наведені у таблиці 1.1.
+Таблиця 1.1 - Історія змін
+№	Дата	Версія звіту	Опис змін
+1	27.05.2025	0.1	Створено розділ “Історія змін”
+2	27.05.2025	0.1	Створено розділ “Завдання”
+3	27.05.2025	0.1	Створено розділ “Опис виконаної роботи”
+4	27.05.2025	0.1	Створено розділ “Висновки”
+5	27.05.2025	0.1	Доданий Додаток А
+6	27.05.2025	0.1	Доданий Додаток Б
+
+2 ЗАВДАННЯ
+Необхідно розробити клієнтську / front-end частину програмної системи.
+Проаналізуйте завдання.
+Виконайте контрольні завдання.
+Відкрийте створений на попередній лабораторній роботі репозиторій GitHub.
+Створіть у репозиторії директорію Task4 та текстовий файл з описом інженерних рішень у цій частині проєкту, як вказано у додатку З
+Зафіксуйте кожну внесену зміну командою git commit з відповідним коментарем та фіксуйте цією командою усі наступні зміни у проєкті.
+Створіть у директорії Task4 піддиректорію для програмного коду, як вказано у додатку З
+Створіть програмний код, завантажте його у створену піддиректорію, зафіксуйте внесені у репозиторій зміни
+Виконайте функціональне тестування створеного програмного коду та створіть відеозапис цього тестування тривалістю 7..10 хвилин з усними поясненнями процесу тестування
+Завантажте створений відеозапис тестування YouTube канал для вашого облікового запису в домені @nure.ua
+Створіть для завантаженого запису його хронологічний опис.
+Оформіть звіт у форматі pdf та завантажте його на навчальну платформу https://dl.nure.ua/
+У коментарях до завантаженого звіту вкажіть посилання на відеозапис тестування у вашому каналі YouTube.
+
+
+
+3 ОПИС ВИКОНАНОЇ РОБОТИ
+Клієнтська частина програмної системи реалізована з використанням серверного шаблонізатора Thymeleaf, інтегрованого у фреймворк Spring Boot.
+Завдяки цьому формування HTML-сторінок відбувається динамічно на стороні серверу, що дозволяє гнучко відображати дані, отримані з бази даних чи інших сервісів.
+Thymeleaf забезпечує генерацію адаптивних та інтерактивних веб-інтерфейсів із підтримкою вставки змінних, циклів, умов та фрагментів шаблонів безпосередньо у HTML-коді.
+ Це спрощує підтримку та розширення інтерфейсу користувача, а також дозволяє легко локалізувати застосунок під різні мови.
+Обробка запитів та логіка відображення організовані через контролери Spring MVC, які приймають HTTP-запити, обробляють дані, формують модель та повертають відповідний шаблон Thymeleaf для відображення користувачу.
+ Взаємодія із сервером здійснюється через стандартні HTTP-запити, а у разі потреби реалізації інтерактивних елементів
+  (наприклад, валідації форм без перезавантаження сторінки) можуть використовуватись вбудовані JavaScript-скрипти та бібліотека jQuery.
+Збірка та запуск клієнтської частини не потребує окремих інструментів, оскільки вона є невід’ємною частиною серверного застосунку Spring Boot.
+Для розгортання у продакшн-середовищі використовується Docker, який дозволяє створити ізольований образ із усіма залежностями.
+Запуск та оркестрація серверної та клієнтської частин виконуються за допомогою Docker Compose, де клієнт є частиною основного сервісу Spring Boot.
+Конфігураційні параметри, такі як параметри підключення до бази даних або шляхи до статичних ресурсів, задаються через зовнішні конфігураційні файли або змінні середовища,
+що забезпечує гнучкість розгортання у різних середовищах (dev, stage, prod).
+Оскільки застосунок доступний у вигляді єдиного Docker-образу, його можна швидко розгорнути на будь-якій платформі, що підтримує Docker, що спрощує адміністрування, забезпечує портативність та масштабованість рішення.
+
+
+Додаток А
+Посилання на відео та хронологічний опис
+
+Відеозапис доповіді на YouTube: https://www.youtube.com/watch?v=4OZ5SzUIQWQ
+Хронологічний опис доповіді:
+
+Демонстрація головної сторінки - 0:05
+Реєстрація нового користувача - 0:15
+Авторизація - 0:24
+Додавання нового сенсора - 0:35
+Перегляд даних сенсора - 0:50
+Редагування сенсора - 1:30
+Видалення сенсора - 1:50
+Вихід з акаунта користувача - 1:55
+
+
+Додаток Б
+Графічні матеріали
+
+
+Рисунок Б.1 - UML діаграма прецедентів
+
+
+Рисунок Б.2 - Діаграма компонентів
+
+
+Рисунок Б.3 - Діаграма взаємодії
+
+
+Рисунок Б.4 - Діаграма станів
+
+
+Додаток В
+Програмний код
+
+В.1 Математична обробка прикладних даних
+
+import java.util.Arrays;
+
+public class MathUtils {
+
+
+    public static double min(double[] data) {
+        return Arrays.stream(data).min().orElse(0);
+    }
+
+
+
+    public static double[] filterOutliers(double[] data) {
+        double mean = mean(data);
+        double std = standardDeviation(data);
+        return Arrays.stream(data)
+                .filter(d -> Math.abs(d - mean) <= 3 * std)
+                .toArray();
+    }
+
+
+    public static double[] movingAverage(double[] data, int window) {
+        if (window <= 1 || window > data.length) return data;
+        double[] result = new double[data.length - window + 1];
+        for (int i = 0; i < result.length; i++) {
+            double sum = 0;
+            for (int j = 0; j < window; j++) {
+                sum += data[i + j];
+            }
+            result[i] = sum / window;
+        }
+        return result;
+    }
+}
+
+
+
+В.2 Адміністрування бізнес-логіки системи
+package com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.service;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.config.PasswordUtil;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.dto.LoginRequestDTO;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.dto.UserDTO;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.dto.UserSettingDTO;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.entity.NotificationPreference;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.entity.User;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class UserService {
+
+
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public UserDTO signup(UserDTO userDTO) {
+        if (userRepository.findByEmail(userDTO.getEmail()) != null) {
+            throw new IllegalArgumentException("Email is already registered");
+        }
+        User user = new User();
+        user.setEmail(userDTO.getEmail());
+        user.setPasswordHash(PasswordUtil.hashPassword(userDTO.getPassword())); // Hash the password
+
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("Email is already registered");
+        }
+
+        return convertToDTO(user);
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> findUserById(Integer id) {
+        return userRepository.findById(id);
+    }
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public void deleteUserById(Integer id) {
+        userRepository.deleteById(id);
+    }
+
+    // Handle User Login
+    public UserDTO login(LoginRequestDTO loginRequest) {
+        User user = userRepository.findByEmail(loginRequest.getEmail());
+        if (user != null && user.getPasswordHash().equals(PasswordUtil.hashPassword(loginRequest.getPassword()))) {
+            return convertToDTO(user);
+        }
+        return null; // Login failed
+    }
+
+    // Convert Entity to DTO
+    private UserDTO convertToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getUserId());
+        userDTO.setEmail(user.getEmail());
+        return userDTO;
+    }
+
+    public UserSettingDTO getUserSettings(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("User not found"));
+        UserSettingDTO settings = new UserSettingDTO();
+        settings.setNotificationPreference(user.getNotificationPreference().toString());
+        settings.setTemperatureUnit(user.getTemperatureUnit().toString());
+        return settings;
+    }
+
+    public void updateUserSettings(Integer userId, UserSettingDTO settings) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("User not found"));
+        user.setNotificationPreference(NotificationPreference.valueOf(settings.getNotificationPreference()));
+        user.setTemperatureUnit(User.TemperatureUnit.valueOf(settings.getTemperatureUnit()));
+        userRepository.save(user);
+    }
+
+}
+
+
+

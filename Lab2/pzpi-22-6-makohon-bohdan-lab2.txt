@@ -1,0 +1,435 @@
+Міністерство освіти і науки України
+Харківський національний  університет радіоелектроніки
+
+Кафедра програмної інженерії
+
+
+ЗВІТ
+з лабораторної роботи №2
+з дисципліни «Архітектура програмного забезпечення»
+
+
+
+Виконав:
+ст. гр. ПЗПІ-22-6
+Макогон Б.О.
+
+Перевірив:
+ст. викл. каф. ПІ
+Сокорчук І.П.
+
+
+Харків 2025
+
+1 ІСТОРІЯ ЗМІН
+Таблиця 1 – Історія змін
+№	Дата	Версія звіту	Опис змін та виправлень
+1	24.05.2025	0.1	Створено розділ «Історія змін»
+2	24.05.2025	0.1	Створено розділ «Завдання»
+3	24.05.2025	0.1	Створено розділ «Опис виконаної роботи»
+4	24.05.2025	0.1	Створено додаток Б та додано всі згадані графічні матеріали
+5	24.05.2025	0.1	Створено додаток В та додано частини програмного коду
+6	24.05.2025	0.1	Створено розділ «Висновки»
+7	24.05.2025	0.1	Додано посилання на відеозапис та хронологічний опис доповіді у додаток А
+
+2 ЗАВДАННЯ
+1.	Розробити серверну / back-end частину програмної системи.
+2.	Проаналізувати завдання у додатку.
+3.	Виконати контрольні завдання п. 2.6.
+4.	Відкрити створений на попередній лабораторній роботі репозиторій GitHub.
+5.	Створіти у репозиторії директорію Task2 та текстовий файл з описом інженерних рішень у цій частині проєкту, як вказано у додатку.
+6.	Зафіксувати кожну внесену зміну командою git commit з відповідним коментарем та фіксувати цією командою усі наступні зміни у проєкті.
+7.	Створити у директорії Task2 піддиректорію для програмного коду, як вказано у додатку.
+8.	Створити програмний код, завантажити його у створену піддиректорію, зафіксувати внесені у репозиторій зміни.
+9.	Виконати функціональне тестування створеного програмного коду та створити відеозапис цього тестування тривалістю 7-10 хвилин з усними поясненнями процесу тестування.
+10.	Завантажити створений відеозапис тестування YouTube канал для вашого облікового запису в домені @nure.ua.
+11.	Створити для завантаженого запису його хронологічний опис.
+12.	Оформити звіт у форматі pdf та завантажити його на навчальну платформу https://dl.nure.ua/.
+13.	У коментарях до завантаженого звіту вказпти посилання на відеозапис тестування у вашому каналі YouTube.
+
+3 ОПИС ВИКОНАНОЇ РОБОТИ
+Серверна частина програмної системи розроблена з використанням мови програмування Java та фреймворку Spring Boot.
+Для зберігання даних використовується реляційна база даних PostgreSQL.
+Доступ до бази даних реалізовано за допомогою ORM-інструменту Spring Data JPA, що дозволяє виконувати основні операції над даними у вигляді об'єктів.
+
+
+Таблиця 1 - Таблиця бази даних "analytics_requests" (
+  request_id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
+  end_date datetime(6) DEFAULT NULL,
+  start_date datetime(6) DEFAULT NULL,
+  timestamp datetime(6) NOT NULL,
+  request_type enum(COMBINED_SUMMARY,HUMIDITY_SUMMARY,TEMPERATURE_SUMMARY) NOT NULL,
+  status enum(COMPLETED,FAILED,PENDING) NOT NULL,
+  PRIMARY KEY (request_id),
+  KEY FKjckwjxc0i4hbqdg17lahcwd63 (user_id),
+  CONSTRAINT FKjckwjxc0i4hbqdg17lahcwd63 FOREIGN KEY (user_id) REFERENCES users (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+Таблиця 2 - Таблиця бази даних "data_exports" (
+  export_id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
+  timestamp datetime(6) NOT NULL,
+  file_path varchar(255) DEFAULT NULL,
+  export_type enum(ALL_DATA,HUMIDITY,TEMPERATURE) NOT NULL,
+  status enum(COMPLETED,FAILED,PENDING) NOT NULL,
+  PRIMARY KEY (export_id),
+  KEY FKqiin12gyq195ltpdn5a7d7h6l (user_id),
+  CONSTRAINT FKqiin12gyq195ltpdn5a7d7h6l FOREIGN KEY (user_id) REFERENCES users (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+Таблиця 3 - Таблиця бази даних "notifications" (
+  sensor_id int NOT NULL,
+  threshold double NOT NULL,
+  user_id int NOT NULL,
+  value double NOT NULL,
+  notification_id bigint NOT NULL AUTO_INCREMENT,
+  timestamp datetime(6) NOT NULL,
+  notification_type enum(HUMIDITY,TEMPERATURE) NOT NULL,
+  status enum(FAILED,SENT) NOT NULL,
+  PRIMARY KEY (notification_id),
+  KEY FKor965p6a0nq4bsr55imaa4rgp (sensor_id),
+  KEY FK9y21adhxn0ayjhfocscqox7bh (user_id),
+  CONSTRAINT FK9y21adhxn0ayjhfocscqox7bh FOREIGN KEY (user_id) REFERENCES users (user_id),
+  CONSTRAINT FKor965p6a0nq4bsr55imaa4rgp FOREIGN KEY (sensor_id) REFERENCES sensors (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+Таблиця 4 - Таблиця бази даних "sensor_data" (
+  sensor_id int NOT NULL,
+  value double DEFAULT NULL,
+  id bigint NOT NULL AUTO_INCREMENT,
+  timestamp datetime(6) DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY FKpb49fy248sscj5xlwwbn5l5lq (sensor_id),
+  CONSTRAINT FKpb49fy248sscj5xlwwbn5l5lq FOREIGN KEY (sensor_id) REFERENCES sensors (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+Таблиця 5 - Таблиця бази даних "sensors" (
+  id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
+  last_updated datetime(6) DEFAULT NULL,
+  location varchar(255) NOT NULL,
+  sensor_type enum(HUMIDITY,PRESSURE,TEMPERATURE) NOT NULL,
+  status enum(ACTIVE,INACTIVE) NOT NULL,
+  PRIMARY KEY (id),
+  KEY FKq5n49xqrxns4esrtwr7hbc04v (user_id),
+  CONSTRAINT FKq5n49xqrxns4esrtwr7hbc04v FOREIGN KEY (user_id) REFERENCES users (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+Таблиця 6 - Таблиця бази даних "sensors" (
+  id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
+  last_updated datetime(6) DEFAULT NULL,
+  location varchar(255) NOT NULL,
+  sensor_type enum(HUMIDITY,PRESSURE,TEMPERATURE) NOT NULL,
+  status enum(ACTIVE,INACTIVE) NOT NULL,
+  PRIMARY KEY (id),
+  KEY FKq5n49xqrxns4esrtwr7hbc04v (user_id),
+  CONSTRAINT FKq5n49xqrxns4esrtwr7hbc04v FOREIGN KEY (user_id) REFERENCES users (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+Таблиця 7 - Таблиця бази даних "system_logs" (
+  log_id bigint NOT NULL AUTO_INCREMENT,
+  timestamp datetime(6) NOT NULL,
+  message varchar(255) NOT NULL,
+  log_type enum(ERROR,INFO,WARNING) NOT NULL,
+  PRIMARY KEY (log_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+Таблиця 8 - Таблиця бази даних "user_settings" (
+  max_value double DEFAULT NULL,
+  min_value double DEFAULT NULL,
+  setting_id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
+  PRIMARY KEY (setting_id),
+  UNIQUE KEY UK4bos7satl9xeqd18frfeqg6tt (user_id),
+  CONSTRAINT FK8v82nj88rmai0nyck19f873dw FOREIGN KEY (user_id) REFERENCES users (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+Таблиця 9 - Таблиця бази даних "users" (
+  user_id int NOT NULL AUTO_INCREMENT,
+  created_at datetime(6) NOT NULL,
+  email varchar(255) NOT NULL,
+  password_hash varchar(255) NOT NULL,
+  notification_preference enum(APP,EMAIL,SMS) NOT NULL,
+  temperature_unit enum(C,F) NOT NULL,
+  PRIMARY KEY (user_id),
+  UNIQUE KEY UK6dotkott2kjsp8vw4d0m25fb7 (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+Таблиця 10 - Специфікація API
+
+UserController
+   Контролер	HTTP-метод	Endpoint	                        Опис	                 Тіло запиту	      Тіло відповіді	Статуси відповіді	     Примітки
+UserController	POST	    /api/users	                Створити нового користувача	      UserDTO	               UserDTO	         201, 400
+UserController	POST	    /api/users/login	        Логін користувача	             LoginRequestDTO	       UserDTO	         200, 401
+UserController	GET       	/api/users/{id}  	        Отримати користувача за ID	          -	                   UserDTO	         200, 404
+UserController	GET      	/api/users	                Отримати всіх користувачів	          -	                List<UserDTO>	        200     	Рекомендується пагінація
+UserController	PUT	        /api/users/{id}	            Оновити дані користувача	       UserDTO	               UserDTO	         200, 404
+UserController	PUT      	/api/users/{id}/settings	Оновити налаштування користувача UserSettingDTO	        UserSettingDTO	     200, 404
+UserController	DELETE	    /api/users/{id}	            Видалити користувача	              -	                      -	             204, 404
+
+
+SensorController
+   Контролер	  HTTP-метод Endpoint	                       Опис	                      Тіло запиту	        Тіло відповіді	 Статуси відповіді	     Примітки
+SensorController  POST	     /api/sensors	             Створити сенсор	               SensorDTO	             SensorDTO	      201, 400
+SensorController  GET	     /api/sensors	           Отримати всі сенсори	                   -	             List<SensorDTO>	     200	     Рекомендується пагінація
+SensorController  GET	     /api/sensors/{id}	       Отримати сенсор за ID	               -	                 SensorDTO	      200, 404
+SensorController  PUT	     /api/sensors/{id}	        Оновити дані сенсора	           SensorDTO	             SensorDTO	      200, 404
+SensorController  DELETE	 /api/sensors/{id}	          Видалити сенсор	                   -	                    -	          204, 404
+
+
+NotificationController
+   Контролер	         HTTP-метод	 Endpoint	                       Опис	                       Тіло запиту	         Тіло відповіді	  Статуси відповіді	      Примітки
+NotificationController	 GET	      /api/notifications	  Отримати всі сповіщення	               -	          List<NotificationDTO>	    200
+NotificationController	 POST	      /api/notifications	  Створити сповіщення	            NotificationDTO	         NotificationDTO	  201, 400
+NotificationController	 DELETE	      /api/notifications/{id} Видалити сповіщення	                   -	                    -	          204, 404
+
+
+AnalyticsRequestController
+   Контролер	            HTTP-метод	  Endpoint	                             Опис	                      Тіло запиту	          Тіло відповіді      Статуси відповіді	   Примітки
+AnalyticsRequestController	POST	      /api/analytics/requests	    Створити аналітичний запит	        AnalyticsRequestDTO	     AnalyticsRequestDTO	  201, 400
+AnalyticsRequestController	GET	          /api/analytics/requests	    Отримати всі аналітичні запити          	-	            List<AnalyticsRequestDTO>	 200
+AnalyticsRequestController	GET	          /api/analytics/requests/{id}	Отримати аналітичний запит за ID	        -	               AnalyticsRequestDTO	  200, 404
+AnalyticsRequestController	DELETE	      /api/analytics/requests/{id}	Видалити аналітичний запит	                -	                     -	              204, 404
+
+
+DataExportController
+     Контролер	        HTTP-метод	      Endpoint	          Опис	           Тіло запиту	       Тіло відповіді	Статуси відповіді	Примітки
+DataExportController	GET	              /api/export	Експортувати дані	       -	           File/ExportDTO	   200, 400
+
+
+SystemLogController
+     Контролер	        HTTP-метод	      Endpoint	            Опис	               Тіло запиту	        Тіло відповіді	   Статуси відповіді	Примітки
+SystemLogController   	GET	              /api/logs	      Отримати всі системні логи	  -	               List<SystemLogDTO>	      200
+SystemLogController	    GET	              /api/logs/{id}	Отримати лог за ID         	  -    	             SystemLogDTO	        200, 404
+SystemLogController	    DELETE	          /api/logs/{id}	Видалити лог	              -                        -	            204, 404
+
+
+4 ВИСНОВКИ
+Під час виконання лабораторної роботи було роброблено серверну частину програмної системи.
+
+Додаток А
+Посилання на відео та хронологічний опис
+
+Відеозапис доповіді на YouTube: https://www.youtube.com/watch?v=PnyoASARBgs
+Хронологічний опис доповіді:
+1 Вступ - 0:00
+2. Робота з User API - 0:20
+2.1. Реєстрація нового користувача - 0:20
+2.2. Логінюся як новий користувач - 0:49
+2.3. Перевірка даних користувача - 1:00
+3. Робота з Sensor API - 1:25
+3.1. Створювання нового сенсора - 1:25
+3.2. Перевірка, що сенсор доданий у список - 1:50
+3.3. Перевірка деталей сенсора по id -
+3.4. Оновлення даних сенсора - 2:10
+3.5. Перевірка оновлення - 2:23
+3.6. Видалення сенсора - 3:00
+
+
+Додаток Б
+Графічні матеріали
+
+Рисунок Б.1 - UML діаграму прецедентів взаємодії адміністратора з системою
+
+Рисунок Б.2 - UML діаграма прецедентів взаємодії користувачів з системою
+
+Рисунок Б.3 - UML діаграма прецедентів взаємодії IoT-пристою з системою
+
+Рисунок Б.4 - UML діаграма розгортання
+
+Рисунок Б.5 - UML діаграма компонентів
+
+Рисунок Б.6 - ER діаграма даних
+
+
+
+
+
+Додаток В
+Програмний код
+
+В.1 Математична обробка прикладних даних
+
+import java.util.Arrays;
+
+public class MathUtils {
+
+    public static double min(double[] data) {
+        return Arrays.stream(data).min().orElse(0);
+    }
+
+    public static double max(double[] data) {
+        return Arrays.stream(data).max().orElse(0);
+    }
+
+    public static double sum(double[] data) {
+        return Arrays.stream(data).sum();
+    }
+
+
+    public static double[] filterByRange(double[] data, double min, double max) {
+        return Arrays.stream(data)
+                .filter(d -> d >= min && d <= max)
+                .toArray();
+    }
+
+
+    public static double[] filterNaNandInf(double[] data) {
+        return Arrays.stream(data)
+                .filter(d -> !Double.isNaN(d) && !Double.isInfinite(d))
+                .toArray();
+    }
+}
+
+
+
+В.2 Адміністрування бізнес-логіки системи
+package com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.service;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.dto.SensorDTO;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.entity.Sensor;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.entity.SensorData;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.entity.User;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.repository.SensorDataRepository;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.repository.SensorRepository;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class SensorService {
+
+    @Autowired
+    private SensorRepository sensorRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private SensorDataRepository sensorDataRepository;
+
+
+    public List<Sensor> findAllSensors() {
+        return sensorRepository.findAll();
+    }
+
+    public Optional<Sensor> findSensorById(Integer id) {
+        return sensorRepository.findById(id);
+    }
+
+    public Sensor saveSensor(Sensor sensor) {
+        return sensorRepository.save(sensor);
+    }
+
+    @Transactional
+    public void deleteSensorById(Integer id) {
+        sensorDataRepository.deleteAllBySensorId(id);
+        sensorRepository.deleteById(id);
+    }
+
+
+    public Sensor createSensor(Integer userId, SensorDTO sensorDTO) {
+        // Fetch the user
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("User with ID " + userId + " not found"));
+
+        // Convert DTO to Entity
+        Sensor sensor = new Sensor();
+        sensor.setLocation(sensorDTO.getLocation());
+        sensor.setSensorType(Sensor.SensorType.valueOf(sensorDTO.getSensorType().toUpperCase()));
+        sensor.setUser(user);
+
+        // Save the sensor
+        return sensorRepository.save(sensor);
+    }
+    public List<Sensor> getSensorsByUserId(Integer userId) {
+        return sensorRepository.findByUserUserId(userId);
+    }
+
+    // Convert Sensor to SensorDTO
+    public SensorDTO convertToDTO(Sensor sensor) {
+        SensorDTO sensorDTO = new SensorDTO();
+        sensorDTO.setId(sensor.getId());
+        sensorDTO.setLocation(sensor.getLocation());
+        sensorDTO.setSensorType(sensor.getSensorType().toString());
+        return sensorDTO;
+    }
+
+    public List<SensorData> getSensorDataBySensorId(Integer sensorId) {
+        return sensorDataRepository.findBySensorId(sensorId);
+    }
+
+}
+
+
+В.3 Резервне копіювання користувацьких даних
+package com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.controller;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.entity.DataExport;
+import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.service.DataExportService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/data-exports")
+public class DataExportController {
+
+    @Autowired
+    private DataExportService dataExportService;
+
+    // GET: Retrieve all data exports
+    @GetMapping
+    public List<DataExport> getAllDataExports() {
+        return dataExportService.findAllDataExports();
+    }
+
+    // GET: Retrieve a data export by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<DataExport> getDataExportById(@PathVariable Integer id) {
+        return dataExportService.findDataExportById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // GET: Retrieve data exports by User ID
+    @GetMapping("/user/{userId}")
+    public List<DataExport> getDataExportsByUserId(@PathVariable Integer userId) {
+        return dataExportService.findDataExportsByUserId(userId);
+    }
+
+    // POST: Create a new data export
+    @PostMapping
+    public ResponseEntity<DataExport> createDataExport(@RequestBody DataExport dataExport) {
+        DataExport savedDataExport = dataExportService.saveDataExport(dataExport);
+        return ResponseEntity.ok(savedDataExport);
+    }
+
+    // PUT: Update an existing data export
+    @PutMapping("/{id}")
+    public ResponseEntity<DataExport> updateDataExport(@PathVariable Integer id, @RequestBody DataExport dataExportDetails) {
+        return dataExportService.findDataExportById(id).map(dataExport -> {
+            dataExport.setExportType(dataExportDetails.getExportType());
+            dataExport.setFilePath(dataExportDetails.getFilePath());
+            dataExport.setStatus(dataExportDetails.getStatus());
+            DataExport updatedDataExport = dataExportService.saveDataExport(dataExport);
+            return ResponseEntity.ok(updatedDataExport);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    // DELETE: Remove a data export by ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDataExport(@PathVariable Integer id) {
+        if (dataExportService.findDataExportById(id).isPresent()) {
+            dataExportService.deleteDataExportById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+}
+
