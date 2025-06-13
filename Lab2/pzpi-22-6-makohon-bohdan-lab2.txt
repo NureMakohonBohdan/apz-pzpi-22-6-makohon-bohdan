@@ -1,5 +1,5 @@
 Міністерство освіти і науки України
-Харківський національний  університет радіоелектроніки
+Харківський національний університет радіоелектроніки
 
 Кафедра програмної інженерії
 
@@ -251,6 +251,7 @@ SystemLogController	    DELETE	          /api/logs/{id}	Видалити лог	
 ПРОГРАМНИЙ КОД
 
 В.1 Математична обробка прикладних даних
+GitHub репозиторій: https://github.com/NureMakohonBohdan/apz-pzpi-22-6-makohon-bohdan-web/blob/main/src/main/java/com/nure/makohon/bohdan/arkpz_pzpi_22_6_makohon_bohdan/service/MathUtils.java
 
 import java.util.Arrays;
 
@@ -286,6 +287,8 @@ public class MathUtils {
 
 
 В.2 Адміністрування бізнес-логіки системи
+GitHub репозиторій: https://github.com/NureMakohonBohdan/apz-pzpi-22-6-makohon-bohdan-web/blob/main/src/main/java/com/nure/makohon/bohdan/arkpz_pzpi_22_6_makohon_bohdan/service/SensorService.java
+
 package com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.service;
 import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.dto.SensorDTO;
 import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.entity.Sensor;
@@ -366,6 +369,8 @@ public class SensorService {
 
 
 В.3 Резервне копіювання користувацьких даних
+GitHub репозиторій: https://github.com/NureMakohonBohdan/apz-pzpi-22-6-makohon-bohdan-web/blob/main/src/main/java/com/nure/makohon/bohdan/arkpz_pzpi_22_6_makohon_bohdan/controller/DataExportController.java
+
 package com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.controller;
 import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.entity.DataExport;
 import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.service.DataExportService;

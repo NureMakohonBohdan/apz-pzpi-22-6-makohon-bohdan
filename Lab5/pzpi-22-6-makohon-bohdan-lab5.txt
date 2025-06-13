@@ -30,6 +30,7 @@
 3	30.05.2025	0.1	Створено розділ “Опис виконаної роботи”
 4	30.05.2025	0.1	Створено розділ “Висновки”
 5	30.05.2025	0.1	Доданий Додаток А
+6	30.05.2025	0.1	Доданий Додаток Б
 
 
 
@@ -92,7 +93,38 @@
 2.3 Демонстрація бази даних - 3:44
 1.12 Демонстрація змін на web стороні - 3:55
 
+Додаток Б
+ПРОГРАМНИЙ КОД
 
+Б.1 Конфігурація Docker Compose
+GitHub репозиторій: https://github.com/NureMakohonBohdan/apz-pzpi-22-6-makohon-bohdan-web/blob/main/docker-compose.yml
+
+version: "3.8"
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydb
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
 
 
 

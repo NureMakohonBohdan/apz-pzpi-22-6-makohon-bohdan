@@ -107,6 +107,7 @@
 ПРОГРАМНИЙ КОД
 
 В.1 Математична обробка прикладних даних
+GitHub репозиторій: https://github.com/NureMakohonBohdan/apz-pzpi-22-6-makohon-bohdan-web/blob/main/src/main/java/com/nure/makohon/bohdan/arkpz_pzpi_22_6_makohon_bohdan/service/MathUtils.java
 
 public class MathUtils {
 

@@ -1,5 +1,5 @@
 Міністерство освіти і науки України
-Харківський національний  університет радіоелектроніки
+Харківський національний університет радіоелектроніки
 
 Кафедра програмної інженерії
 
@@ -98,6 +98,7 @@ Thymeleaf забезпечує генерацію адаптивних та ін
 ПРОГРАМНИЙ КОД
 
 В.1 Математична обробка прикладних даних
+GitHub репозиторій: https://github.com/NureMakohonBohdan/apz-pzpi-22-6-makohon-bohdan-web/blob/main/src/main/java/com/nure/makohon/bohdan/arkpz_pzpi_22_6_makohon_bohdan/service/MathUtils.java
 
 import java.util.Arrays;
 
@@ -136,6 +137,9 @@ public class MathUtils {
 
 
 В.2 Адміністрування бізнес-логіки системи
+
+GitHub репозиторій: https://github.com/NureMakohonBohdan/apz-pzpi-22-6-makohon-bohdan-web/blob/main/src/main/java/com/nure/makohon/bohdan/arkpz_pzpi_22_6_makohon_bohdan/service/UserService.java
+
 package com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.service;
 import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.config.PasswordUtil;
 import com.nure.makohon.bohdan.arkpz_pzpi_22_6_makohon_bohdan.dto.LoginRequestDTO;
